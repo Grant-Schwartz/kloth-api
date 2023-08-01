@@ -75,7 +75,7 @@ class DraftKingsAPI:
                     break
 
             
-            event_string = f'{parsed_home}-{parsed_away}-{event["startDate"][:10]}'
+            event_string = f'{parsed_away}-{parsed_home}-{event["startDate"][:10]}'
             event_hash = hashlib.md5(bytes(event_string, encoding='utf-8')).hexdigest()
 
             parsed_events.append(to_dict(

@@ -5,4 +5,4 @@ matches = {
 }
 
 def parse_name(sport: str, team: str):
-    return process.extractOne(team, matches[sport])[00]
+    return process.extractOne(team, matches[sport])[0]
