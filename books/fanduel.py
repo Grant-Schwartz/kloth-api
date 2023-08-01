@@ -15,6 +15,9 @@ class FanduelAPI:
         self.timezone = "America/New_York"
         self.provider = "Fanduel"
 
+        self.sport = None
+        self.sport_code = None
+
         self.sport_keys = {
             "baseball_mlb": "mlb"
         }
