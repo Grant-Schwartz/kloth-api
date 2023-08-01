@@ -28,17 +28,16 @@ class FanduelAPI:
         Resolve Fanduel sport code from standardized code
         """
         return self.sport_keys[sport]
-
-    def resolve_line_types(self, line_types: list[str]):
-        return [self.line_keys[i] for i in line_types]
     
     def parse(self, events: list[dict], markets: list)-> BookResponse:
+        """
+        Parse json from Fanduel API
+        """
         parsed_events: list[BookResponse] = []
         events = events.values()
         markets = markets.values()
         for event in events:            
-            # all_moneylines = list(filter(lambda market: market["marketName"] == "Moneyline" and str(market["eventId"]) == event_id, markets))
-            # all_spreads = list(filter(lambda market: market["marketType"] == "TOTAL_POINTS_(OVER/UNDER)" and str(market["eventId"]) == event_id, markets))
+
             parsed_away = ""
             parsed_home = ""
             event_markets = []
@@ -105,7 +104,7 @@ class FanduelAPI:
         self.sport = sport
         self.sport_code = sport_code
 
-        resp = requests.get(f'{self.base_url}/content-managed-page?page=CUSTOM&customPageId={sport_code}&_ak={self.api_key}&timezone={self.timezone}')
+        resp = requests.get(f'{self.base_url}/content-managed-page?page=CUSTOM&customPageId={sport_code}&_ak={self.api_key}&timezone={self.timezone}', timeout=10)
 
         if not resp.ok:
             raise APIException(self.provider, "Error fetching API")
@@ -116,6 +115,3 @@ class FanduelAPI:
         markets = data["markets"]
         finished_data = self.parse(events, markets)
         return finished_data
-    
-test = FanduelAPI()
-test.fetch("baseball_mlb")

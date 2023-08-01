@@ -1,17 +1,21 @@
+from datetime import datetime
+import hashlib
 from schema import BookResponse, Market, Outcome
 from utils import APIException, to_dict
 from fuzzy import parse_name
 import requests
-import hashlib
-from datetime import datetime
-import json
 
 class DraftKingsAPI:
+    """
+    Class to interface with DraftKings hidden API
+    """
 
     def __init__(self):
         self.base_url = "https://sportsbook-us-pa.draftkings.com/sites/US-PA-SB/api/v5"
         self.provider = "DraftKings"
-    
+        self.sport = None
+        self.sport_code = None
+
         self.sport_keys = {
             "baseball_mlb": "84240"
         }
@@ -23,6 +27,9 @@ class DraftKingsAPI:
         return self.sport_keys[sport]
     
     def parse(self, events: list[dict], markets: list)-> BookResponse:
+        """
+        Parse json into class format
+        """
         parsed_events: list[BookResponse] = []
         for event in events:
             parsed_away = parse_name(self.sport, event["teamName1"])
@@ -79,7 +86,7 @@ class DraftKingsAPI:
                     last_update=datetime.now(),
                     markets=outcomes
                 ))
-            ) 
+            )
         return parsed_events
                 
             
@@ -92,7 +99,7 @@ class DraftKingsAPI:
         self.sport = sport
         self.sport_code = sport_code
 
-        resp = requests.get(f'{self.base_url}/eventgroups/{self.sport_code}?format=json')
+        resp = requests.get(f'{self.base_url}/eventgroups/{self.sport_code}?format=json', timeout=10)
 
         if not resp.ok:
             raise APIException(self.provider, "Error fetching API")
@@ -104,6 +111,3 @@ class DraftKingsAPI:
 
         finished_data = self.parse(events, markets)
         return  finished_data
-
-test = DraftKingsAPI()
-test.fetch("baseball_mlb")
