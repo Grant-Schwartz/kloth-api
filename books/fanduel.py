@@ -1,9 +1,9 @@
+import hashlib
+from datetime import datetime
 from schema import BookResponse, Market, Outcome
 from utils import APIException, to_dict
 from fuzzy import parse_name
 import requests
-import hashlib
-from datetime import datetime
 
 class FanduelAPI:
     """
