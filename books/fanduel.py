@@ -1,5 +1,5 @@
 from schema import BookResponse, Market, Outcome
-from utils import APIException,to_dict
+from utils import APIException, to_dict
 from fuzzy import parse_name
 import requests
 import hashlib
@@ -114,7 +114,7 @@ class FanduelAPI:
 
         events = data["events"]
         markets = data["markets"]
-        finished_data = self.parse(events ,markets)
+        finished_data = self.parse(events, markets)
         return finished_data
     
 test = FanduelAPI()
